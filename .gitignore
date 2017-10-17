@@ -58,6 +58,9 @@ typings/
 .env
 
 # certs
-
 *.pem
 *.pfx
+
+#config
+config.json
+
