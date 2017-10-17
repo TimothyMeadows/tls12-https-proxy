@@ -3,6 +3,7 @@ TLS 1.2 Proxy designed to provide a method for communicating with TLS 1.2 only s
 
 # Configure
 ### Linux Users
+* Type the command below into a shell window:
 ``` bash
 sudo apt update && sudo apt install git nodejs npm
 git clone https://github.com/TimothyMeadows/tls12-https-proxy
