@@ -1,13 +1,48 @@
 #/bin/bash
-openssl genrsa -out private-key.pem 4096
-openssl req -new -sha256 -key private-key.pem -out public-csr.pem
-cat public-csr.pem
-
-read -p "Do you want to self sign the certificate request (y/n)?" choice
+read -p "Do you have a certificate already (y/n)?" choice
 case "$choice" in 
-  y|Y ) openssl x509 -req -in public-csr.pem -signkey private-key.pem -out public-cert.pem && openssl pkcs12 -export -in public-cert.pem -inkey private-key.pem -certfile public-cert.pem -out public-cert.pfx && rm -f public-csr.pem;;
-  n|N ) exit 1;;
-  * ) exit 1;;
+  n|N ) 
+    openssl genrsa -out private-key.pem 4096;
+    openssl req -new -sha256 -key private-key.pem -out public-csr.pem;
+    cat public-csr.pem;
+
+    read -p "Do you want to self sign the certificate request (y/n)?" choice2
+    case "$choice2" in 
+      y|Y ) 
+        openssl x509 -req -in public-csr.pem -signkey private-key.pem -out public-cert.pem;
+        openssl pkcs12 -export -in public-cert.pem -inkey private-key.pem -certfile public-cert.pem -out public-cert.pfx;
+        rm -f public-csr.pem;
+      ;;
+      n|N ) ;;
+    esac
+  ;;
+  y|Y ) 
+    read -p "Is it already in pkcs12 format aka .pfx (y/n)?" choice2
+    case "$choice2" in 
+      n|N ) 
+        read -p "Private key file path: " private_key
+        read -p "Public cert file path: " public_cert
+        openssl pkcs12 -export -in $public_cert -inkey $private_key -certfile $public_cert -out public-cert.pfx;
+      ;;
+      y|Y ) 
+        read -p "Pfx cert file path: " pfx
+        cp $pfx ./public-cert.pfx
+      ;;
+    esac
 esac
 
+printf "\nThe proxy will need the password for the certificate you are using.\nPassphrase: "
+read -s passphrase
+
+printf "\nWhat port would you like the proxy to run on?\n"
+printf "Note: Any port below 1024 will require sudo!\n"
+read -p "Port: " port
+
+printf "\nCreating config.json...\n"
+echo "{ \"port\": \"$port\", \"passphrase\": \"$passphrase\" }" > config.json
+
+printf "Installing packages...\n"
 npm install
+
+printf "\n\nConfiguration done. You can start the proxy with 'npm start' or 'node index'\n"
+exit 1;
