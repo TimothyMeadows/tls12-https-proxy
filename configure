@@ -1,0 +1,13 @@
+#/bin/bash
+openssl genrsa -out private-key.pem 4096
+openssl req -new -sha256 -key private-key.pem -out public-csr.pem
+cat public-csr.pem
+
+read -p "Do you want to self sign the certificate request (y/n)?" choice
+case "$choice" in 
+  y|Y ) openssl x509 -req -in public-csr.pem -signkey private-key.pem -out public-cert.pem && openssl pkcs12 -export -in public-cert.pem -inkey private-key.pem -certfile public-cert.pem -out public-cert.pfx && rm -f public-csr.pem;;
+  n|N ) exit 1;;
+  * ) exit 1;;
+esac
+
+npm install
