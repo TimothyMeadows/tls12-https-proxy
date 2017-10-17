@@ -3,8 +3,8 @@ var querystring = require('querystring');
 var httpProxy = require('http-proxy');
 var fs = require('fs');
 
-var config = fs.readFileSync('config.json');
-if (!config) {
+var config = JSON.parse(fs.readFileSync('config.json'));
+if (!config || !config.port) {
     console.log("No configuration file found! Please run 'configure' or 'configure.bat' first.");
     return;
 }
