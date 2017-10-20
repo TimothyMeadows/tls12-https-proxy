@@ -3,7 +3,7 @@ TLS 1.2 Proxy designed to provide a method for communicating with TLS 1.2 only s
 
 # Configure
 ### Linux Users
-* Type the command below into a shell window:
+* Type the commands below into a shell window:
 ``` bash
 sudo apt update && sudo apt install git nodejs npm
 git clone https://github.com/TimothyMeadows/tls12-https-proxy
@@ -22,3 +22,9 @@ npm start
 configure.bat
 npm start
 ```
+
+# Usage
+
+Proxy is designed to run at the port you configured it to run at. You can reach it using the https protocol only. Intended host is parsed using the X-Host, or x-host header. You can specificy the X-Host, or x-host querystring rather the header. The header, or querystring will be parsed out before reaching the intended host.
+
+Finally, external assets will be pushed through the proxy. However, it depends on the referer header to determine the previous X-Host location that the asset should be drawn from. This can lead to issues if the asset was not hosted on the actual intended host but rather a third party. Full content manipulation may be reuqired to prevent this.
