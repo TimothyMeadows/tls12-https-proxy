@@ -27,14 +27,8 @@ var terminate = function (res) {
 var rewrite = function (headers, host) {
     var headerString = "";
     for (var key in headers) {
-        if (key === "x-host" || key === "X-Host" || key === "accept-encoding")
+        if (key === "x-host" || key === "X-Host")
             continue;
-
-        if (key === "accept")
-            headers[key] = "text/html,application/xhtml+xml,application/xml;";
-
-        if (key === "accept-language")
-            headers[key] = "enUS,en;";
 
         if (host) {
             if (key === "host" || key === "Host")
@@ -87,12 +81,10 @@ var server = https.createServer(options, function (req, res) {
 
             req.on('end', function () {
                 var payload = `${req.method} ${host_uri.path} HTTP/1.0\r\n${rewrite(req.headers, host_uri.hostname)}\r\n${body}\r\n\r\n`;
-                //console.log(payload);
                 socket.write(payload);
             });
         } else {
             var payload = `${req.method} ${host_uri.path} HTTP/1.0\r\n${rewrite(req.headers, host_uri.hostname)}\r\n\r\n`;
-            //console.log(payload);
             socket.write(payload);
         }
         
@@ -110,9 +102,7 @@ var server = https.createServer(options, function (req, res) {
         res.end();
     });
 
-    // TODO: Fix this just a temp hack.
     setTimeout(function() {
-        //console.log(response);
         var packet = response.split("\r\n\r\n");
         var headers = packet[0].split("\r\n");
 
@@ -127,7 +117,7 @@ var server = https.createServer(options, function (req, res) {
         res.write(packet[1]);
         res.end();
         socket.destroy();
-    }, 1000);
+    }, 1000 + Math.floor((Math.random() * 1000) + 1));
 });
 
 server.listen(config.port);
