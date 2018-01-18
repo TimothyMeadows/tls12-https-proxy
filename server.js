@@ -74,7 +74,9 @@ var server = https.createServer(options, function (req, res) {
         }
     }
 
-    console.log(`${ip} -> ${req.url}`);
+    if (config.verbose && config.verbose === true)
+        console.log(`${ip} -> ${host}`);
+
     var socket = tls.connect(443, url.parse(`https://${host}`).hostname, () => {
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
         var uri = url.parse(req.url);
@@ -112,7 +114,9 @@ var server = https.createServer(options, function (req, res) {
     });
 
     setTimeout(function() {
-        console.log(`${ip} <- ${req.url}`);
+        if (config.verbose && config.verbose === true)
+            console.log(`${ip} <- ${host}`);
+
         var packet = response.split("\r\n\r\n");
         var headers = packet[0].split("\r\n");
 
