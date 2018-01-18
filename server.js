@@ -30,6 +30,14 @@ var rewrite = function (headers, host) {
         if (key === "x-host" || key === "X-Host")
             continue;
 
+        // TODO: Remove when gzip is supported
+        if (key === "Accept" || key === "accept")
+            headers[key] = "text/html,application/xhtml+xml,application/xml;";
+        
+        // TODO: Remove when gzip is supported
+        if (key === "Accept-Encoding" || key === "accept-encoding")
+            continue;
+
         if (host) {
             if (key === "host" || key === "Host")
                 headers[key] = host;
@@ -66,6 +74,7 @@ var server = https.createServer(options, function (req, res) {
         }
     }
 
+    console.log(`${ip} -> ${req.url}`);
     var socket = tls.connect(443, url.parse(`https://${host}`).hostname, () => {
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
         var uri = url.parse(req.url);
@@ -99,16 +108,17 @@ var server = https.createServer(options, function (req, res) {
     });
 
     socket.on('end', () => {
-        res.end();
+        socket.destroy();
     });
 
     setTimeout(function() {
+        console.log(`${ip} <- ${req.url}`);
         var packet = response.split("\r\n\r\n");
         var headers = packet[0].split("\r\n");
 
         for (var i in headers) {
             var header = headers[i].split(": ");
-            if (header[0].indexOf("HTTP/1.0") != -1)
+            if (header[0].indexOf("HTTP/1.0") != -1 || header[0].indexOf("HTTP/1.1") != -1)
                 continue;
 
             res.setHeader(header[0], header[1]);
