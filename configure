@@ -38,8 +38,11 @@ printf "\nWhat port would you like the proxy to run on?\n"
 printf "Note: Any port below 1024 will require sudo!\n"
 read -p "Port: " port
 
+printf "\nPlease enter a key you would like to use. More can be entered into the config.json file later.\n"
+read -p "Key: " key
+
 printf "\nCreating config.json...\n"
-echo "{ \"port\": \"$port\", \"passphrase\": \"$passphrase\" }" > config.json
+echo "{ \"port\": \"$port\", \"passphrase\": \"$passphrase\", \"verbose\": true, \"key\": [\"$key\"] }" > config.json
 
 printf "Installing packages...\n"
 npm install
