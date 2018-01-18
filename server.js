@@ -32,7 +32,7 @@ var rewrite = function (headers, host) {
 
         // TODO: Remove when gzip is supported
         if (key === "Accept" || key === "accept")
-            headers[key] = "text/html,application/xhtml+xml,application/xml;";
+            headers[key] = "text/html,application/xhtml+xml,application/xml,application/json;";
         
         // TODO: Remove when gzip is supported
         if (key === "Accept-Encoding" || key === "accept-encoding")
