@@ -29,6 +29,8 @@ This proxy is not exactly a MiTM attack in that it can't impersonate the certifi
 
 If you are using linux then 'configure' will give you the option of creating a self-signed certificate to host from. This will only work if you disable checking on the certificate in your code however. Instead it's highly advised to host the proxy on a domain with a valid certificate.
 
+If your using windows then 'configure.bat' will not give you the option of creating a self-signed certificate but you can find many tutorials online for creating self-signed certificates in windows. The proxy is designed to use the windows pfx certificate format with a password.
+
 # Security
 
 The proxy does not limit connections by ip address, or filter to localhost. This because in all hosting cases you should have access to the systems firewall, or an external firewall unit. You can filter access to the port you have chosen using one of these methods rather than software doing it which is vulnerable to DDoS attacks.
