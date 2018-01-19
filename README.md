@@ -1,5 +1,5 @@
 # tls12-https-proxy
-TLS 1.2 Proxy designed to provide a method for communicating with TLS 1.2 only sites for older languages that lack the ability to do it directly. 
+TLS 1.2 Proxy designed to provide a method for communicating with TLS 1.2 only sites for older languages that lack the ability to do it directly. Such as .NET 1.1, 2.0, and 3.5.
 
 # Configure
 ### Linux Users
@@ -22,6 +22,16 @@ npm start
 configure.bat
 npm start
 ```
+
+# Hosting Certificate
+
+This proxy is not exactly a MiTM attack in that it can't impersonate the certificate on X-Host. Instead it will create a physical TLS client and connect to X-Host on the requests behalf. It will then serve that request back to the original request's response with very limited rewrites of the Host header, and temporarly the Accept, and Accept-Encoding headers to prevent compression (not yet supported).
+
+If you are using linux then 'configure' will give you the option of creating a self signed certificate to host from. This will only work if you disable checking on the certificate in your code however. Instead it's highly advised to host the proxy on a domain with a valid certificate.
+
+# Security
+
+The proxy does not limit connections by ip address, or filter to localhost. This because in all hosting cases you should have access to the systems firewall, or an external firewall unit.
 
 # Usage
 
