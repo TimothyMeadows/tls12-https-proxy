@@ -67,7 +67,7 @@ var rewrite = function (headers, host) {
 
 var now = function () {
     var date = new Date();
-    return `${(((date.getMonth() +1) < 10) ? "0" : "") + (date.getMonth() +1)}/${((date.getDate() < 10) ? "0" : "") + date.getDate()}/${date.getFullYear()} ${(date.getHours() < 10 ? "0" : "") + date.getHours()}:${((date.getMinutes() < 10) ? "0" : "") + date.getMinutes()}:${((date.getSeconds() < 10) ? "0" : "") + date.getSeconds()}`;
+    return `${(((date.getMonth() + 1) < 10) ? "0" : "") + (date.getMonth() + 1)}/${((date.getDate() < 10) ? "0" : "") + date.getDate()}/${date.getFullYear()} ${(date.getHours() < 10 ? "0" : "") + date.getHours()}:${((date.getMinutes() < 10) ? "0" : "") + date.getMinutes()}:${((date.getSeconds() < 10) ? "0" : "") + date.getSeconds()}`;
 }
 
 var server = https.createServer(options, function (req, res) {
@@ -148,6 +148,12 @@ var server = https.createServer(options, function (req, res) {
     setTimeout(function () {
         if (config.verbose && config.verbose === true)
             console.log(`[${now()}] ${ip} <- ${host}`);
+
+        if (!response || response == "" || response.length == 0) {
+            res.end();
+            socket.destroy();
+            return;
+        }
 
         var packet = response.split("\r\n\r\n");
         var headers = packet[0].split("\r\n");
