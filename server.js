@@ -160,7 +160,7 @@ var server = https.createServer(options, function (req, res) {
 
         for (var i in headers) {
             var header = headers[i].split(": ");
-            if (header[0].indexOf("HTTP/1.0") != -1 || header[0].indexOf("HTTP/1.1") != -1)
+            if (!header || !header[0] || header[0].indexOf("HTTP/1.0") != -1 || header[0].indexOf("HTTP/1.1") != -1)
                 continue;
 
             res.setHeader(header[0], header[1]);
