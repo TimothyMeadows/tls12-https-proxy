@@ -1,3 +1,5 @@
+This project has been DEPRECATED! You should have moved to an upgraded version of your language that supports TLS 1.2 by now. No future support will be given to this project.
+
 # tls12-https-proxy
 TLS 1.2 Proxy designed to provide a method for communicating with TLS 1.2 only sites for older languages that lack the ability to do it directly. Such as .NET 1.1, 2.0, and 3.5.
 
